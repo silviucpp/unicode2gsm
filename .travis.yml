@@ -27,9 +27,9 @@ matrix:
 before_script:
 
 - if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get -y update || true ; fi
-- if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get install -y cmake || true ; fi
+- if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get install -y cmake libboost-test-dev || true ; fi
 
-- if [[ $TRAVIS_OS_NAME == osx ]]; then brew install cmake || true; fi
+- if [[ $TRAVIS_OS_NAME == osx ]]; then brew install cmake boost || true; fi
 
 script:
   - mkdir build && cd build
