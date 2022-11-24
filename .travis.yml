@@ -35,4 +35,4 @@ script:
   - mkdir build && cd build
   - ENABLE_UNIT_TEST=1 cmake ..
   - make
-  - ./tests/unidecode2gsm_test
+  - ./tests/unicode2gsm_test

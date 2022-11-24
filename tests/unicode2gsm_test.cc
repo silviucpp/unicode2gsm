@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
 
-#define BOOST_TEST_MODULE unidecode2gsm_test
+#define BOOST_TEST_MODULE unicode2gsm_test
 
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -10,7 +10,7 @@
 
 const char *kGsmAlphabet=u8"@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà^{}\[~]|€";
 
-BOOST_AUTO_TEST_SUITE(unidecode2gsm_test)
+BOOST_AUTO_TEST_SUITE(unicode2gsm_test)
 
 BOOST_AUTO_TEST_CASE(gsm_alphabet_no_extended_transliteration) 
 {

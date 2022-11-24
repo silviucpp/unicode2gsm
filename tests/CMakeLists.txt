@@ -8,10 +8,10 @@ file(GLOB_RECURSE TEST_FILES *.cc)
 string (REPLACE ";" "\n    " TEST_FILES_MSG "${TEST_FILES}")
 message(STATUS "Test files:\n    ${TEST_FILES_MSG}")
 
-add_executable(unidecode2gsm_test ${TEST_FILES})
+add_executable(unicode2gsm_test ${TEST_FILES})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 include_directories(${BOOST_INCLUDEDIR})
 
-target_link_libraries(unidecode2gsm_test unidecode2gsm ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${Boost_LIBRARIES})
+target_link_libraries(unicode2gsm_test unicode2gsm ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${Boost_LIBRARIES})
