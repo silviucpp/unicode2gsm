@@ -6,6 +6,7 @@
 
 #include "unicode2gsm/unicode2gsm.h"
 #include <map>
+#include <string.h>
 
 #define MAX_CODEPOINT_VALUE 65536
 
