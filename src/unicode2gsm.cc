@@ -487,7 +487,7 @@ std::map<unicode_char, const char*> kTransliterationMap = {
     {0X201E, "\""}, //„
     {0X201F, "\""}, //‟
     {0X2026, "..."}, //…
-    {0X2028, " "}, //Line Separator  
+    {0X2028, " "}, //Line Separator
     {0X2029, " "}, //Paragraph Separator
     {0X202F, " "}, //Narrow No-Break Space
     {0X2039, ">"}, //‹

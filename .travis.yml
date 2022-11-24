@@ -1,0 +1,39 @@
+language: c++
+
+matrix:
+
+  include:
+    - os: linux
+      dist: bionic
+
+    - os: linux
+      dist: focal
+
+    - os: linux
+      dist: focal
+
+    - os: osx
+      osx_image: xcode12.2
+      language: generic
+      env:
+        - HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=true
+        - HOMEBREW_NO_INSTALL_UPGRADE=true
+        - HOMEBREW_NO_INSTALL_CLEANUP=true
+      cache:
+        directories:
+          - $HOME/Library/Caches/Homebrew
+          - /usr/local/Homebrew
+
+before_script:
+
+- if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get -y update || true ; fi
+- if [[ $TRAVIS_OS_NAME == linux ]]; then sudo apt-get install -y cmake || true ; fi
+
+- if [[ $TRAVIS_OS_NAME == osx ]]; then brew install cmake || true; fi
+
+script:
+    mkdir build
+    cd build
+    ENABLE_UNIT_TEST=1 cmake ..
+    make
+    ./tests/unidecode2gsm_test
