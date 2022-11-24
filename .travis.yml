@@ -32,8 +32,7 @@ before_script:
 - if [[ $TRAVIS_OS_NAME == osx ]]; then brew install cmake || true; fi
 
 script:
-    mkdir build
-    cd build
-    ENABLE_UNIT_TEST=1 cmake ..
-    make
-    ./tests/unidecode2gsm_test
+  - mkdir build && cd build
+  - ENABLE_UNIT_TEST=1 cmake ..
+  - make
+  - ./tests/unidecode2gsm_test

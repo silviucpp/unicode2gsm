@@ -1,5 +1,7 @@
-unicode2gsm
-===============
+# unicode2gsm
+
+[![Build Status](https://travis-ci.com/silviucpp/unicode2gsm.svg?branch=master)](https://travis-ci.com/github/silviucpp/unicode2gsm)
+[![GitHub](https://img.shields.io/github/license/silviucpp/unicode2gsm)](https://github.com/silviucpp/unicode2gsm/blob/master/LICENSE)
 
 ## What it is ?
 
