@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(gsm_alphabet_with_extended_transliteration)
 
 BOOST_AUTO_TEST_CASE(transliterate) 
 {
-    const std::string kInString=u8"［ ］ ˜ ∼";
+    const std::string kInString=u8"［ ］ ˜ 〜";
     const std::string kOutput1=u8"[ ] ~ ~";
     const std::string kOutput2=u8"( ) - -";
 

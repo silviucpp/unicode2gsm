@@ -7,6 +7,8 @@
 #include "unicode2gsm/unicode2gsm.h"
 #include "unicode2gsm/charset.h"
 
+#include <string.h>
+
 namespace unicode2gsm{
 
 namespace {
@@ -14,14 +16,16 @@ namespace {
 // lookup tables
 
 const char* kTransliterationLookupTable[kMaxCodepointValue] = {nullptr};
+size_t kTransliterationLookupSizeTable[kMaxCodepointValue] = {0};
+
 bool kGsmLookupTable[kMaxCodepointValue] = {false};
 
 // helper functions
 
 inline uint32_t do_transliteration(const char* utf8, std::string& output)
 {
-    uint32_t step_size = GetCodePointSize(*utf8);
-    unicode_char codepoint = GetCodePoint(utf8, step_size);
+    uint32_t codepoint_size = GetCodePointSize(*utf8);
+    unicode_char codepoint = GetCodePoint(utf8, codepoint_size);
 
     const char* replacement = nullptr;
 
@@ -30,19 +34,18 @@ inline uint32_t do_transliteration(const char* utf8, std::string& output)
 
     if(replacement != nullptr)
     {
-        while (*replacement != 0)
-        {
-            output.push_back(*replacement);
-            replacement++;
-        }
+        size_t size = kTransliterationLookupSizeTable[codepoint];
+
+        if(size > 0)
+            output.append(replacement, size);
     }
     else
     {
         // unsupported unicode symbol or symbol not found into our replacement table. copy back as it is
-        output.append(utf8, step_size);
+        output.append(utf8, codepoint_size);
     }
 
-    return step_size;
+    return codepoint_size;
 }
 
 inline bool next_codepoint_is_gsm7(const char* utf8, uint32_t & codepoint_size)
@@ -61,7 +64,31 @@ inline bool next_codepoint_is_gsm7(const char* utf8, uint32_t & codepoint_size)
 
 bool init_transliteration_map(bool transliterate_gsm_extended)
 {
-    return init_lookup_tables(transliterate_gsm_extended, kTransliterationLookupTable, kGsmLookupTable, kMaxCodepointValue);
+    memset(kTransliterationLookupSizeTable, 0, sizeof(kTransliterationLookupSizeTable));
+
+    if(!init_lookup_tables(transliterate_gsm_extended, kTransliterationLookupTable, kGsmLookupTable, kMaxCodepointValue))
+        return false;
+
+    for(unicode_char i = 0; i < kMaxCodepointValue; i++)
+    {
+        const char* replacement = kTransliterationLookupTable[i];
+        
+        if(replacement != nullptr)
+        {
+            uint32_t size = 0;
+
+                while (*replacement != 0)
+                {
+                size_t codepoint_size = GetCodePointSize(*replacement);
+                size+=codepoint_size;
+                replacement+=codepoint_size;
+                }
+
+                kTransliterationLookupSizeTable[i] = size;
+        }
+    }
+
+    return true;
 }
 
 bool requires_transliteration(const char* utf8)
