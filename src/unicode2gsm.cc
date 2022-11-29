@@ -72,19 +72,19 @@ bool init_transliteration_map(bool transliterate_gsm_extended)
     for(unicode_char i = 0; i < kMaxCodepointValue; i++)
     {
         const char* replacement = kTransliterationLookupTable[i];
-        
+
         if(replacement != nullptr)
         {
             uint32_t size = 0;
 
-                while (*replacement != 0)
-                {
+            while (*replacement != 0)
+            {
                 size_t codepoint_size = GetCodePointSize(*replacement);
                 size+=codepoint_size;
                 replacement+=codepoint_size;
-                }
+            }
 
-                kTransliterationLookupSizeTable[i] = size;
+            kTransliterationLookupSizeTable[i] = size;
         }
     }
 
