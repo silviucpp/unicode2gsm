@@ -7,6 +7,8 @@ namespace unicode2gsm {
 
     typedef uint32_t unicode_char;
 
+    static const unicode_char kMaxCodepointValue = 65536;
+
     static const uint8_t kMask0[] = {0xff};
     static const uint8_t kMask1[] = {0x3f, 0x1f};
     static const uint8_t kMask2[] = {0x3f, 0x3f, 0x0f};
@@ -35,10 +37,10 @@ namespace unicode2gsm {
     {
         const uint8_t* mask = kCodePointMasks[code_point_size - 1];
         unicode_char result = 0;
-        
+
         for (uint32_t i = code_point_size; i-- >0; ptr++)
             result |= (*ptr & mask[i]) << 6 * i;
-        
+
         return result;
     }
 }

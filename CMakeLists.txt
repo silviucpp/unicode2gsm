@@ -9,7 +9,7 @@ endif()
 
 include_directories(include)
 
-file(GLOB_RECURSE sources src/*.cc)
+file(GLOB_RECURSE sources src/*.cc include/*.h)
 string (REPLACE ";" "\n    " FILES_MSG "${sources}")
 message(STATUS "source files:\n    ${FILES_MSG}")
 
