@@ -29,20 +29,28 @@ inline uint32_t do_transliteration(const char* utf8, std::string& output)
 
     const char* replacement = nullptr;
 
-    if(codepoint < kMaxCodepointValue)
-        replacement = kTransliterationLookupTable[codepoint];
-
-    if(replacement != nullptr)
+    //detect \r\n and replace with \n
+    if(codepoint == '\n' && output.empty() == false && output.back() == '\r')
     {
-        size_t size = kTransliterationLookupSizeTable[codepoint];
-
-        if(size > 0)
-            output.append(replacement, size);
+        output[output.size() - 1] = '\n';
     }
     else
     {
-        // unsupported unicode symbol or symbol not found into our replacement table. copy back as it is
-        output.append(utf8, codepoint_size);
+        if(codepoint < kMaxCodepointValue)
+            replacement = kTransliterationLookupTable[codepoint];
+
+        if(replacement != nullptr)
+        {
+            size_t size = kTransliterationLookupSizeTable[codepoint];
+
+            if(size > 0)
+                output.append(replacement, size);
+        }
+        else
+        {
+            // unsupported unicode symbol or symbol not found into our replacement table. copy back as it is
+            output.append(utf8, codepoint_size);
+        }
     }
 
     return codepoint_size;
@@ -100,6 +108,9 @@ bool requires_transliteration(const char* utf8)
         if(!next_codepoint_is_gsm7(utf8, step_size))
             return true;
 
+        if(*utf8 == '\r' && *(utf8+step_size) == '\n')
+            return true;
+
         utf8+=step_size;
     }
 
@@ -115,8 +126,12 @@ bool requires_transliteration(const char* utf8, size_t length)
         if(!next_codepoint_is_gsm7(utf8, step_size))
             return true;
 
-        utf8+=step_size;
         length-=step_size;
+
+        if(*utf8 == '\r' && length > 0 && utf8[1] == '\n')
+            return true;
+
+        utf8+=step_size;
     }
 
     return false;

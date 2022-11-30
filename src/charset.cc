@@ -56,7 +56,10 @@ std::map<unicode_char, const char*> kTransliterationMap = {
     {0x0007, u8""}, //
     {0x0008, u8""}, //
     {0x0009, u8" "}, //
+    {0x000A, u8"\n"}, //LF
     {0x000B, u8""}, //
+    {0x000C, u8" "}, //FF
+    {0x000D, u8"\r"}, //CR
     {0x000E, u8""}, //
     {0x000F, u8""}, //
     {0x0010, u8""}, //

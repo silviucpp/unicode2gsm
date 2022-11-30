@@ -42,6 +42,8 @@ Currently the library transliterates symbols into the following Unicode Characte
 |0xFE50 | 0xFE6F| Small Form Variants           |
 |0xFF00 | 0xFFEF| Halfwidth and Fullwidth Forms |
 
+Also the transliteration process is replacing all the `CRLF` (`\r\n`) sequences into `\n`.
+
 ## Building
 
 Building the static library:

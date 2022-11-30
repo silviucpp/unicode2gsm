@@ -5,12 +5,18 @@
 
 #include <boost/test/unit_test.hpp>
 #include <iostream>
+#include <regex>
 
 #include "unicode2gsm/unicode2gsm.h"
 #include "unicode2gsm/common.h"
 #include "unicode2gsm/charset.h"
 
 const char *kGsmAlphabet=u8"@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà^{}\[~]|€";
+
+std::string replace(const std::string& original, const std::string& find, const std::string& replace)
+{
+    return std::regex_replace(original, std::regex(find), replace);
+}
 
 BOOST_AUTO_TEST_SUITE(unicode2gsm_test)
 
@@ -68,6 +74,33 @@ BOOST_AUTO_TEST_CASE(check_transliteration_lookup_table)
             replacement+=step_size;
         }
     }
+}
+
+BOOST_AUTO_TEST_CASE(new_line_and_tabs_optimizations)
+{
+    BOOST_CHECK_EQUAL(unicode2gsm::init_transliteration_map(false), true);
+
+    const std::string str_1 = "string\rstring2";
+    const std::string str_2 = "string\nstring2";
+    const std::string str_3 = "string\r\nstring2";
+    const std::string str_4 = "string\r\n";
+    const std::string str_5 = "string\nstring2\rstring3\r\nstring4\fstring5\tstring6";
+
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_1.c_str()), false);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_2.c_str()), false);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_3.c_str()), true);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_4.c_str()), true);
+
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_1.c_str(), str_1.length()), false);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_2.c_str(), str_2.length()), false);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_3.c_str(), str_3.length()), true);
+    BOOST_CHECK_EQUAL(unicode2gsm::requires_transliteration(str_4.c_str(), str_4.length()), true);
+
+    BOOST_CHECK_EQUAL(unicode2gsm::transliterate(str_1.c_str()), str_1);
+    BOOST_CHECK_EQUAL(unicode2gsm::transliterate(str_2.c_str()), str_2);
+    BOOST_CHECK_EQUAL(unicode2gsm::transliterate(str_3.c_str()), replace(str_3, "\r\n", "\n"));
+    BOOST_CHECK_EQUAL(unicode2gsm::transliterate(str_4.c_str()), replace(str_4, "\r\n", "\n"));
+    BOOST_CHECK_EQUAL(unicode2gsm::transliterate(str_5.c_str()), "string\nstring2\rstring3\nstring4 string5 string6");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
